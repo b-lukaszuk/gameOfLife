@@ -1,0 +1,78 @@
+<div>
+  <h1>Convay's Game of Life</h1>
+  <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+    More info -> Wikipedia
+  </a>
+  <table>
+    <tr>
+      <td>
+        <div class="gameboard">
+          <div *ngFor="let row of gameBoard.getGameBoard(); index as rId">
+            <div
+              *ngFor="let col of row; index as cId"
+              [ngClass]="
+                gameBoard.getCellContent([rId, cId]) ? 'alive' : 'dead'
+              "
+              (click)="togglePixel([rId, cId])"
+            >
+              <span> </span>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td>
+        <h1>Choose gameboard type</h1>
+        <div *ngFor="let boardType of boardTypes">
+          <input
+            name="boardType"
+            type="radio"
+            value="{{ boardType }}"
+            (change)="radioChangeHandler($event)"
+            [checked]="boardType === choosenBoardType"
+          />
+          <b> {{ boardType }} </b>
+        </div>
+        <div *ngIf="choosenBoardType === 'random'">
+          <h1>Choose initial probability of a cell being alive</h1>
+          <label for="initialProbabilities"> initial probability: </label>
+          <select
+            name="initialProbabilities"
+            id="initialProbabilities"
+            [(ngModel)]="initialProbability"
+          >
+            <option
+              *ngFor="let probability of initialProbabilities"
+              [value]="probability"
+            >
+              {{ probability }}
+            </option>
+          </select>
+          <br />
+        </div>
+        <h1>Choose transition time between generations</h1>
+        <label for="frameSpeedsFPS"> initial transition time [FPS]: </label>
+        <select
+          name="frameSpeedsFPS"
+          id="frameSpeedsFPS"
+          [(ngModel)]="frameSpeedFPS"
+        >
+          <option *ngFor="let speed of frameSpeedsFPS" [value]="speed">
+            {{ speed }}
+          </option>
+        </select>
+        <br />
+        <br />
+        <button type="button" (click)="startTheGame()" [disabled]="gameSarted">
+          (Re)Start the game
+        </button>
+        <br />
+        <br />
+        <button type="button" (click)="stopTheGame()" [disabled]="!gameSarted">
+          Stop the game
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
+<router-outlet></router-outlet>
